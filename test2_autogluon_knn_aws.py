@@ -1,6 +1,7 @@
 print('starting...')
 
 import os
+import sys
 import datetime as dt
 import numpy as np
 import pandas as pd
@@ -10,8 +11,10 @@ from sklearn.impute import KNNImputer
 from autogluon.tabular import TabularPredictor
 import featuretools as ft
 import boto3
-import warnings
-warnings.simplefilter('ignore')
+
+
+sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 1)
+
 
 # df_train(1200000) df_test(800000)
 train_rows = 1_200_000
@@ -23,7 +26,7 @@ use_pca = True
 seed = 42
 num_neighbors = 50
 
-#'''
+'''
 s3 = boto3.client('s3')
 bucket = 'test-ecs-s3'
 
@@ -74,16 +77,18 @@ df.to_parquet(local_file)
 key = 'kaggle_input/train_imputed.parquet'
 s3.upload_file(local_file, bucket, key)
 #exit()
-#'''
+'''
 
-#s3 = boto3.client('s3')
-#bucket = 'test-ecs-s3'
-#key = 'kaggle_input/train_imputed.parquet'
-#local_file = '/tmp/train_imputed.parquet'
-#s3.download_file(bucket, key, local_file)
+print('downloading ...')
+s3 = boto3.client('s3')
+bucket = 'test-ecs-s3'
+key = 'kaggle_input/train_imputed.parquet'
+local_file = '/tmp/train_imputed.parquet'
+s3.download_file(bucket, key, local_file)
 
-#df = pd.read_parquet('/tmp/train_imputed.parquet')
-#input_cols = df.columns.difference([target])
+df = pd.read_parquet('/tmp/train_imputed.parquet')
+input_cols = df.columns.difference([target])
+print('data loaded')
 
 if use_featuretools:
     df['id'] = range(len(df))
