@@ -2,6 +2,7 @@ print('starting...')
 
 import os
 import sys
+import gc
 import datetime as dt
 import numpy as np
 import pandas as pd
@@ -86,7 +87,7 @@ key = 'kaggle_input/train_imputed.parquet'
 local_file = '/tmp/train_imputed.parquet'
 s3.download_file(bucket, key, local_file)
 
-df = pd.read_parquet('/tmp/train_imputed.parquet')
+df = pd.read_parquet(local_file)
 input_cols = df.columns.difference([target])
 print('data loaded')
 
@@ -129,6 +130,8 @@ if use_featuretools:
     cols_list = feature_matrix.columns
     feature_matrix[target] = df[target].values
     df = feature_matrix.copy()
+    del feature_matrix
+    gc.collect()
 
 pca = PCA()
 pca.fit(df[input_cols])
@@ -154,6 +157,9 @@ else:
     input_dim = df.shape[1]-1
     if not use_featuretools:
         cols_list = input_cols
+
+del df
+gc.collect()
 
 #scalery = StandardScaler()
 #scalery = PowerTransformer(method='yeo-johnson', standardize=True)
