@@ -64,8 +64,8 @@ input_cols = df.columns.difference([target])
 
 print('imputing...')
 imputer = KNNImputer(n_neighbors=num_neighbors)
-df_impute1 = pd.DataFrame(imputer.fit_transform(df.loc[:100_000]), columns=df.columns, index=df.loc[:100_000].index)
-df_impute2 = pd.DataFrame(imputer.transform(df.loc[100_000:]), columns=df.columns, index=df.loc[100_000:].index)
+df_impute1 = pd.DataFrame(imputer.fit_transform(df.loc[:10_000]), columns=df.columns, index=df.loc[:10_000].index)
+df_impute2 = pd.DataFrame(imputer.transform(df.loc[10_000:]), columns=df.columns, index=df.loc[10_000:].index)
 df = pd.concat([df_impute1, df_impute2], axis=0)
 
 print('uploading imputed data...')
