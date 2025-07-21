@@ -221,15 +221,15 @@ df_test.loc[:, 'preds_best'] = np.exp(inf_best-1)
 df_test.loc[:, 'preds_top'] = np.exp(inf_top-1)
 
 print('uploading result.')
-local_file = '/tmp/preds.csv'
+local_file = f'/tmp/preds_{seed}.csv'
 df_test.to_csv(local_file, index=None)
-key = 'kaggle_output/preds.csv'
+key = f'kaggle_output/preds_{seed}.csv'
 s3.upload_file(local_file, bucket, key)
 
 print('uploading leaderboard.')
-local_file = '/tmp/res_autogluon.csv'
+local_file = f'/tmp/res_autogluon_{seed}.csv'
 leaderboard.to_csv(local_file, index=None)
-key = 'kaggle_output/res_autogluon.csv'
+key = f'kaggle_output/res_autogluon_{seed}.csv'
 s3.upload_file(local_file, bucket, key)
 
 print("All done!!")
