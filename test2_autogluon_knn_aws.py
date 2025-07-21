@@ -25,6 +25,8 @@ use_pca = True
 seed = int(os.getenv('SEED'))
 num_neighbors = 50
 
+print(f'SEED:{seed}')
+
 '''
 s3 = boto3.client('s3')
 bucket = 'test-ecs-s3'
