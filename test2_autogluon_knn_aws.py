@@ -13,9 +13,7 @@ from autogluon.tabular import TabularPredictor
 import featuretools as ft
 import boto3
 
-
 sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 1)
-
 
 # df_train(1200000) df_test(800000)
 train_rows = 1_200_000
@@ -24,7 +22,7 @@ test_rows = 800_000
 target = 'Premium Amount'
 use_featuretools = True
 use_pca = True
-seed = 42
+seed = int(os.getenv('SEED'))
 num_neighbors = 50
 
 '''
