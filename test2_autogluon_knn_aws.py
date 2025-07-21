@@ -1,5 +1,5 @@
 print('starting...')
-vdvdzs
+
 import os
 import datetime as dt
 import numpy as np
