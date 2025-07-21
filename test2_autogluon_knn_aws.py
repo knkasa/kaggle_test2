@@ -193,7 +193,7 @@ predictor.fit(
     set_best_to_refit_full=True,
     keep_only_best=False,  # Keep multiple models for analysis
     save_space=False,  # Keep all models for inspection
-    excluded_model_types=['RF', 'ET', 'KNN'],  
+    excluded_model_types=['RF', 'XT', 'KNN'],  
     included_model_types=None,  
     ag_args_fit={'seed': seed},
     #random_seed=seed,
