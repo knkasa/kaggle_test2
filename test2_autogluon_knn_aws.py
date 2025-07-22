@@ -162,8 +162,11 @@ if use_pca:
     df_pca = pd.DataFrame(pca_final.fit_transform(df[input_cols]), columns=cols_list, index=df.index)
     df_pca.loc[:, target] = df[target]
 
-    df_train = df_pca.iloc[:int(train_rows*0.8)].copy()
-    df_val = df_pca.iloc[int(train_rows*0.8):-test_rows].copy()
+    #df_train = df_pca.iloc[:int(train_rows*0.8)].copy()
+    #df_val = df_pca.iloc[int(train_rows*0.8):-test_rows].copy()
+    #df_test = df_pca.iloc[-test_rows:].copy()
+    df_train = df_pca.iloc[:10000].copy()
+    df_val = df_pca.iloc[10000:20000].copy()
     df_test = df_pca.iloc[-test_rows:].copy()
     input_dim = num_pca_cols
 else:
