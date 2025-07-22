@@ -91,6 +91,22 @@ df = pd.read_parquet(local_file)
 input_cols = df.columns.difference([target])
 print('data loaded')
 
+print('reducing data size')
+df_train = df[:train_rows].copy()
+df_test = df[train_rows:].copy()
+del df
+gc.collect()
+
+df_val = df_train[:10000].copy()
+#df_train = df_train[10000:].sort_values(by=target, ascending=False)[:int(train_rows*0.3)]
+#df_train =  df_train.sample(frac=1, random_state=seed)
+#df_train = df_train[:10000].copy()
+df_train = df_train[10000:20000].copy()
+
+df = pd.concat([df_train, df_val], axis=0)
+df = pd.concat([df, df_test], axis=0)
+
+
 if use_featuretools:
     df['id'] = range(len(df))
     es = ft.EntitySet(id="new_data")
