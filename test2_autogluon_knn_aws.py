@@ -91,20 +91,18 @@ df = pd.read_parquet(local_file)
 input_cols = df.columns.difference([target])
 print('data loaded')
 
-print('reducing data size')
-df_train = df[:train_rows].copy()
-df_test = df[train_rows:].copy()
-del df
-gc.collect()
-
-df_val = df_train[:10000].copy()
+#print('reducing data size')
+#df_train = df[:train_rows].copy()
+#df_test = df[train_rows:].copy()
+#del df
+#gc.collect()
+#df_val = df_train[:10000].copy()
 #df_train = df_train[10000:].sort_values(by=target, ascending=False)[:int(train_rows*0.3)]
 #df_train =  df_train.sample(frac=1, random_state=seed)
 #df_train = df_train[:10000].copy()
-df_train = df_train[10000:20000].copy()
-
-df = pd.concat([df_train, df_val], axis=0)
-df = pd.concat([df, df_test], axis=0)
+#df_train = df_train[10000:20000].copy()
+#df = pd.concat([df_train, df_val], axis=0)
+#df = pd.concat([df, df_test], axis=0)
 
 
 if use_featuretools:
@@ -117,7 +115,7 @@ if use_featuretools:
         )
 
     transformation_primitives = [
-        "add_numeric",           # col1 + col2
+        #"add_numeric",           # col1 + col2
         #"subtract_numeric",      # col1 - col2  
         "multiply_numeric",      # col1 * col2
         #"divide_numeric",        # col1 / col2
@@ -162,12 +160,12 @@ if use_pca:
     df_pca = pd.DataFrame(pca_final.fit_transform(df[input_cols]), columns=cols_list, index=df.index)
     df_pca.loc[:, target] = df[target]
 
-    #df_train = df_pca.iloc[:int(train_rows*0.8)].copy()
-    #df_val = df_pca.iloc[int(train_rows*0.8):-test_rows].copy()
-    #df_test = df_pca.iloc[-test_rows:].copy()
-    df_train = df_pca.iloc[:10000].copy()
-    df_val = df_pca.iloc[10000:20000].copy()
+    df_train = df_pca.iloc[:int(train_rows*0.8)].copy()
+    df_val = df_pca.iloc[int(train_rows*0.8):-test_rows].copy()
     df_test = df_pca.iloc[-test_rows:].copy()
+    #df_train = df_pca.iloc[:10000].copy()
+    #df_val = df_pca.iloc[10000:20000].copy()
+    #df_test = df_pca.iloc[-test_rows:].copy()
     input_dim = num_pca_cols
 else:
     df_train = df.iloc[:int(train_rows*0.8)].copy()
@@ -208,7 +206,7 @@ predictor = TabularPredictor(
 predictor.fit(
     df_train,
     time_limit=21600,  
-    presets='high_quality',
+    presets='best_quality',
     #hyperparameters=advanced_hyperparameters,
     num_bag_folds=4,  # each folds creates one model.
     num_bag_sets=1,    # number of bagging model.
@@ -217,8 +215,8 @@ predictor.fit(
     set_best_to_refit_full=True,
     keep_only_best=False,  # Keep multiple models for analysis
     save_space=False,  # Keep all models for inspection
-    excluded_model_types=['RF', 'XT', 'KNN'],  
-    included_model_types=None,  
+    #excluded_model_types=['RF', 'XT', 'KNN'],  
+    included_model_types=["NN_TORCH", "FASTAI", "CATBOOST"],  
     ag_args_fit={'seed': seed},
     #random_seed=seed,
     )
