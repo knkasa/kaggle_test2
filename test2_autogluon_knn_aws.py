@@ -251,9 +251,9 @@ key = f'kaggle_output/preds_high_{seed}.csv'
 s3.upload_file(local_file, bucket, key)
 
 print('uploading leaderboard.')
-local_file = f'/tmp/res_autogluon_high_{seed}.csv'
+local_file = f'/tmp/res_autogluon_{seed}.csv'
 leaderboard.to_csv(local_file, index=None)
-key = f'kaggle_output/res_autogluon_high_{seed}.csv'
+key = f'kaggle_output/res_autogluon_{seed}.csv'
 s3.upload_file(local_file, bucket, key)
 
 print("All done!!")
