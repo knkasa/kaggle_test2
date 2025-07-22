@@ -207,7 +207,7 @@ predictor = TabularPredictor(
 
 predictor.fit(
     df_train,
-    time_limit=200000,  
+    time_limit=21600,  
     presets='high_quality',
     #hyperparameters=advanced_hyperparameters,
     num_bag_folds=4,  # each folds creates one model.
